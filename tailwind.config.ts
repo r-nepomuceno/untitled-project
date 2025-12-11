@@ -62,7 +62,7 @@ const config = {
         },
       },
       fontFamily: {
-        sans: ["Inter", "system-ui", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "sans-serif"],
+        sans: ["Geist Sans", "sans-serif"],
       },
       fontSize: {
         display: ["3rem", { lineHeight: "1.1" }],
