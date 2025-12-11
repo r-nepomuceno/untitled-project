@@ -19,10 +19,18 @@ const config = {
     },
     extend: {
       colors: {
-        border: "hsl(var(--border))",
+        // Design system colors
+        accent: "#FFD000",
+        background: "#F6F1E7",
+        surface: "#FFFFFF",
+        "text-primary": "#111111",
+        "text-secondary": "#444444",
+        border: "#E5E2DC",
+        // shadcn/ui colors (kept for compatibility)
+        "shadcn-border": "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
+        "shadcn-background": "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
           DEFAULT: "hsl(var(--primary))",
@@ -40,7 +48,7 @@ const config = {
           DEFAULT: "hsl(var(--muted))",
           foreground: "hsl(var(--muted-foreground))",
         },
-        accent: {
+        "shadcn-accent": {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
         },
@@ -53,10 +61,39 @@ const config = {
           foreground: "hsl(var(--card-foreground))",
         },
       },
+      fontFamily: {
+        sans: ["Inter", "system-ui", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "sans-serif"],
+      },
+      fontSize: {
+        display: ["3rem", { lineHeight: "1.1" }],
+        headline: ["2rem", { lineHeight: "1.2" }],
+        subheadline: ["1.25rem", { lineHeight: "1.4" }],
+        body: ["1rem", { lineHeight: "1.6" }],
+      },
+      boxShadow: {
+        elevation: "0 2px 8px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04)",
+        "elevation-sm": "0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.03)",
+        "elevation-md": "0 4px 12px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06)",
+        "elevation-lg": "0 8px 24px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.08)",
+      },
       borderRadius: {
+        xl: "1rem",
+        "2xl": "1.5rem",
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      transitionProperty: {
+        default: "color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter",
+      },
+      transitionDuration: {
+        default: "200ms",
+      },
+      transitionTimingFunction: {
+        default: "cubic-bezier(0.4, 0, 0.2, 1)",
+      },
+      backgroundImage: {
+        contours: "url('/textures/contours.svg')",
       },
       keyframes: {
         "accordion-down": {

@@ -51,10 +51,32 @@
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-shadcn-border;
+  }
+  html {
+    @apply font-sans;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-text-primary;
+  }
+}
+
+@layer components {
+  .card-surface {
+    @apply bg-surface rounded-xl shadow-elevation;
+  }
+  
+  .transition-default {
+    @apply transition-all duration-default ease-default;
+  }
+  
+  .contour-background {
+    @apply bg-contours bg-repeat bg-center bg-[length:800px_800px];
+    opacity: 0.12;
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    z-index: -1;
   }
 }
 
