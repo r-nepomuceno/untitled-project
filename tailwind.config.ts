@@ -20,7 +20,7 @@ const config = {
     extend: {
       colors: {
         // Design system colors
-        accent: "#FFD000",
+        accent: "#F5D547",
         background: "#F6F1E7",
         surface: "#FFFFFF",
         "text-primary": "#111111",

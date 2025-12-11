@@ -59,7 +59,7 @@ export default function SearchBar({ onResults }: SearchBarProps) {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           disabled={loading}
-          className="w-full max-w-xl rounded-md border border-neutral-300 bg-white px-4 py-3 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-500 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full max-w-xl rounded-md border border-neutral-300 bg-white px-4 py-3 shadow-sm focus-visible:outline-none focus-visible:border-accent focus-visible:ring-1 focus-visible:ring-accent/40 disabled:opacity-50 disabled:cursor-not-allowed"
         />
       </form>
       {error && (

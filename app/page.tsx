@@ -18,10 +18,10 @@ export default function Home() {
             untitled project
           </div>
           <div className="flex gap-6">
-            <a href="#" className="text-neutral-900/80 hover:text-neutral-900 transition-colors">
+            <a href="#" className="text-neutral-900/80 hover:text-accent transition-colors">
               About
             </a>
-            <a href="#" className="text-neutral-900/80 hover:text-neutral-900 transition-colors">
+            <a href="#" className="text-neutral-900/80 hover:text-accent transition-colors">
               Sign In
             </a>
           </div>
@@ -35,6 +35,9 @@ export default function Home() {
           <h1 className="text-4xl md:text-6xl font-bold text-neutral-900 tracking-tight">
             Map the market.
           </h1>
+          
+          {/* Accent Bar */}
+          <div className="w-12 h-1 bg-accent rounded-full mt-4" />
           
           {/* Subheadline */}
           <p className="max-w-2xl mt-4 text-neutral-700 text-lg md:text-xl leading-relaxed">
