@@ -32,7 +32,7 @@ export default function Home() {
       <main className="relative z-10 flex-1 flex flex-col items-center justify-center px-6 pt-24">
         <div className="flex flex-col items-center text-center">
           {/* Headline */}
-          <h1 className="text-5xl md:text-6xl font-bold tracking-tight leading-[1.1] text-neutral-900">
+          <h1 className="text-6xl md:text-7xl font-semibold tracking-tight leading-[1.05] text-neutral-900">
             Map the market.
           </h1>
           
@@ -40,7 +40,7 @@ export default function Home() {
           <div className="w-12 h-1 bg-accent rounded-full mt-4" />
           
           {/* Subheadline */}
-          <p className="max-w-2xl mt-4 text-lg md:text-xl text-muted-foreground leading-relaxed">
+          <p className="max-w-xl mx-auto mt-6 text-base md:text-lg text-muted-foreground">
             AI-powered mapping that reveals companies, clusters, people, and patterns — all from a single search.
           </p>
 
