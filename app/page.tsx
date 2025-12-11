@@ -29,10 +29,10 @@ export default function Home() {
       </nav>
 
       {/* Hero Section */}
-      <main className="relative z-10 flex-1 flex flex-col items-center justify-center px-6">
-        <div className="flex flex-col items-center text-center mt-24 md:mt-32">
+      <main className="relative z-10 flex-1 flex flex-col items-center justify-center px-6 pt-24">
+        <div className="flex flex-col items-center text-center">
           {/* Headline */}
-          <h1 className="text-4xl md:text-6xl font-bold text-neutral-900 tracking-tight">
+          <h1 className="text-5xl md:text-6xl font-bold tracking-tight leading-[1.1] text-neutral-900">
             Map the market.
           </h1>
           
@@ -40,12 +40,12 @@ export default function Home() {
           <div className="w-12 h-1 bg-accent rounded-full mt-4" />
           
           {/* Subheadline */}
-          <p className="max-w-2xl mt-4 text-neutral-700 text-lg md:text-xl leading-relaxed">
+          <p className="max-w-2xl mt-4 text-lg md:text-xl text-muted-foreground leading-relaxed">
             AI-powered mapping that reveals companies, clusters, people, and patterns — all from a single search.
           </p>
 
           {/* Search Bar */}
-          <div className="mt-8 w-full">
+          <div className="mt-4 w-full">
             <SearchBar />
           </div>
         </div>
