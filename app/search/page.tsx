@@ -92,6 +92,22 @@ export default async function Page({
     console.log("GRAPH STRUCTURE:", graph);
   }
 
+  const industryActivity = Object.entries(graph.industries)
+    .map(([industry, data]) => {
+      const totalSignals = Object.values(data.signals).reduce(
+        (sum, count) => sum + count,
+        0
+      );
+
+      return {
+        industry,
+        totalSignals,
+        companyCount: data.companies.length,
+      };
+    })
+    .sort((a, b) => b.totalSignals - a.totalSignals)
+    .slice(0, 5);
+
   const companiesByIndustry = companies.reduce(
     (acc, company) => {
       const key = company.industry ?? "Other";
@@ -110,6 +126,32 @@ export default async function Page({
       <h1 className="text-2xl font-semibold mb-8">
         Results for "{query}"
       </h1>
+
+      {industryActivity.length > 0 && (
+        <section className="mb-12 max-w-3xl">
+          <h2 className="text-sm font-medium text-neutral-700 mb-3">
+            Most Active Industries
+          </h2>
+
+          <ul className="text-sm text-neutral-600 space-y-1">
+            {industryActivity.map(
+              ({ industry, totalSignals, companyCount }) => (
+                <li key={industry}>
+                  <a
+                    href={`/industry/${slugify(industry)}`}
+                    className="hover:underline"
+                  >
+                    {industry}
+                  </a>
+                  <span className="text-neutral-400 ml-2">
+                    — {totalSignals} signals across {companyCount} companies
+                  </span>
+                </li>
+              )
+            )}
+          </ul>
+        </section>
+      )}
 
       {!hasResults && <EmptyState />}
 
