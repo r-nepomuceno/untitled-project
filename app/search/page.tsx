@@ -50,6 +50,16 @@ export default async function Page({
   const industries = data.industries ?? [];
   const signals = data.signals ?? [];
 
+  const companiesByIndustry = companies.reduce(
+    (acc, company) => {
+      const key = company.industry ?? "Other";
+      if (!acc[key]) acc[key] = [];
+      acc[key].push(company);
+      return acc;
+    },
+    {} as Record<string, typeof companies>
+  );
+
   const hasResults =
     companies.length || industries.length || signals.length;
 
@@ -98,15 +108,27 @@ export default async function Page({
               Companies
             </h2>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {companies.map((company) => (
-                <CompanyCard
-                  key={company.name}
-                  name={company.name}
-                  industry={company.industry}
-                  signalCount={company.signals?.length}
-                />
-              ))}
+            <div className="space-y-8">
+              {Object.entries(companiesByIndustry).map(
+                ([industry, companies]) => (
+                  <section key={industry}>
+                    <h3 className="text-sm font-medium mb-3 text-neutral-700">
+                      {industry}
+                    </h3>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {companies.map((company) => (
+                        <CompanyCard
+                          key={company.name}
+                          name={company.name}
+                          industry={company.industry}
+                          signalCount={company.signals?.length}
+                        />
+                      ))}
+                    </div>
+                  </section>
+                )
+              )}
             </div>
           </div>
         </div>
