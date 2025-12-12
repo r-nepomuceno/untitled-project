@@ -1,26 +1,34 @@
-interface CompanyCardProps {
-  name: string
-  industry?: string
-  signalCount?: number
-}
+type Props = {
+  name: string;
+  industry?: string;
+  signalCount?: number;
+};
 
-export default function CompanyCard({ name, industry, signalCount }: CompanyCardProps) {
-  const slug = name.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "")
-  
+export default function CompanyCard({
+  name,
+  industry,
+  signalCount,
+}: Props) {
   return (
-    <a
-      href={`/company/${slug}`}
-      className="block bg-[#FAF9F6] border border-[#E6E1D9] rounded-lg p-4 hover:shadow-sm hover:border-[#D4CFC4] transition-all"
-    >
-      <h3 className="font-semibold text-text-primary mb-1">{name}</h3>
-      {industry && (
-        <p className="text-sm text-text-secondary mb-2">{industry}</p>
-      )}
-      {signalCount !== undefined && signalCount > 0 && (
-        <div className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-[#F3C43F]/20 text-text-primary">
-          {signalCount} signal{signalCount !== 1 ? "s" : ""}
+    <div className="rounded-lg border border-neutral-200 bg-white p-4 transition hover:border-neutral-300">
+      <div className="flex items-start justify-between gap-2">
+        <div>
+          <h3 className="text-sm font-semibold text-neutral-900">
+            {name}
+          </h3>
+          {industry && (
+            <p className="mt-1 text-xs text-neutral-500">
+              {industry}
+            </p>
+          )}
         </div>
-      )}
-    </a>
-  )
+
+        {typeof signalCount === "number" && signalCount > 0 && (
+          <span className="text-xs rounded-full bg-[#F3C43F]/20 text-[#8A6A00] px-2 py-0.5">
+            {signalCount}
+          </span>
+        )}
+      </div>
+    </div>
+  );
 }
