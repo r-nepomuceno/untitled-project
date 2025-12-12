@@ -1,6 +1,13 @@
 import { Suspense } from "react";
 import CompanyCard from "@/components/CompanyCard";
 
+function slugify(value: string) {
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
+
 type SearchResult = {
   companies?: { name: string; industry?: string; signals?: string[] }[];
   industries?: string[];
@@ -53,6 +60,38 @@ export default async function Page({
   const industries = data.industries ?? [];
   const signals = data.signals ?? [];
 
+  const graph = {
+    industries: {} as Record<
+      string,
+      {
+        companies: string[];
+        signals: Record<string, number>;
+      }
+    >,
+  };
+
+  for (const company of companies) {
+    const industry = company.industry ?? "Other";
+
+    if (!graph.industries[industry]) {
+      graph.industries[industry] = {
+        companies: [],
+        signals: {},
+      };
+    }
+
+    graph.industries[industry].companies.push(company.name);
+
+    for (const signal of company.signals ?? []) {
+      graph.industries[industry].signals[signal] =
+        (graph.industries[industry].signals[signal] ?? 0) + 1;
+    }
+  }
+
+  if (process.env.DEV_MODE === "true") {
+    console.log("GRAPH STRUCTURE:", graph);
+  }
+
   const companiesByIndustry = companies.reduce(
     (acc, company) => {
       const key = company.industry ?? "Other";
@@ -83,9 +122,16 @@ export default async function Page({
                 <h2 className="text-sm font-medium mb-3 text-neutral-700">
                   Industries
                 </h2>
-                <ul className="space-y-1 text-sm text-neutral-600">
+                <ul className="space-y-1 text-sm">
                   {industries.map((industry) => (
-                    <li key={industry}>{industry}</li>
+                    <li key={industry}>
+                      <a
+                        href={`/industry/${slugify(industry)}`}
+                        className="text-neutral-700 hover:underline"
+                      >
+                        {industry}
+                      </a>
+                    </li>
                   ))}
                 </ul>
               </section>
