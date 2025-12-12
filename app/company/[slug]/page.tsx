@@ -6,34 +6,42 @@ type Company = {
   sources?: string[];
 };
 
-async function fetchCompanyData(name: string): Promise<Company | null> {
+function normalize(str: string) {
+  return str.toLowerCase().replace(/[^a-z0-9]/g, "");
+}
+
+async function fetchCompanyData(slug: string): Promise<Company | null> {
+  const baseUrl =
+    process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+
+  const nameGuess = slug.replace(/-/g, " ");
+
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL ?? ""}/api/search?q=${encodeURIComponent(
-      name
-    )}`,
+    `${baseUrl}/api/search?q=${encodeURIComponent(nameGuess)}`,
     { cache: "no-store" }
   );
 
   if (!res.ok) return null;
 
   const data = await res.json();
-
   const companies = data.companies ?? [];
 
   return (
     companies.find(
-      (c: Company) => c.name.toLowerCase() === name.toLowerCase()
-    ) ?? companies[0] ?? null
+      (c: Company) =>
+        normalize(c.name) === normalize(nameGuess)
+    ) ??
+    companies[0] ??
+    null
   );
 }
 
-type Props = {
+export default async function CompanyPage({
+  params,
+}: {
   params: { slug: string };
-};
-
-export default async function CompanyPage({ params }: Props) {
-  const companyName = params.slug.replace(/-/g, " ");
-  const company = await fetchCompanyData(companyName);
+}) {
+  const company = await fetchCompanyData(params.slug);
 
   if (!company) {
     return (
@@ -84,29 +92,6 @@ export default async function CompanyPage({ params }: Props) {
           ) : (
             <p className="text-neutral-500">
               No people extracted yet.
-            </p>
-          )}
-        </section>
-
-        <section>
-          <h2 className="font-medium mb-2">Sources</h2>
-          {company.sources?.length ? (
-            <ul className="list-disc ml-5 space-y-1">
-              {company.sources.map((src) => (
-                <li key={src}>
-                  <a
-                    href={src}
-                    target="_blank"
-                    className="underline text-neutral-600"
-                  >
-                    {src}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="text-neutral-500">
-              Source links will appear here.
             </p>
           )}
         </section>

@@ -101,7 +101,55 @@ async function performSearch(query: string) {
     })
   )
 
-  return NextResponse.json({ results: enrichedResults })
+  // Aggregate entities across all results
+  const aggregated = {
+    companies: new Map<string, any>(),
+    industries: new Set<string>(),
+    signals: new Set<string>(),
+    people: new Set<string>(),
+  }
+
+  for (const result of enrichedResults) {
+    const entities = result.entities
+    if (!entities) continue
+
+    for (const company of entities.companies ?? []) {
+      // Extract industry from company category
+      if (company.category) {
+        aggregated.industries.add(company.category)
+      }
+
+      // Extract signals from company
+      for (const signal of company.signals ?? []) {
+        aggregated.signals.add(signal)
+      }
+
+      // Merge companies by name, combining signals
+      const existing = aggregated.companies.get(company.name)
+      if (existing) {
+        aggregated.companies.set(company.name, {
+          ...company,
+          signals: [
+            ...new Set([...(existing.signals ?? []), ...(company.signals ?? [])]),
+          ],
+        })
+      } else {
+        aggregated.companies.set(company.name, {
+          name: company.name,
+          industry: company.category,
+          description: company.description,
+          signals: company.signals ?? [],
+        })
+      }
+    }
+  }
+
+  return NextResponse.json({
+    companies: Array.from(aggregated.companies.values()),
+    industries: Array.from(aggregated.industries),
+    signals: Array.from(aggregated.signals),
+    people: Array.from(aggregated.people),
+  })
 }
 
 export async function GET(request: NextRequest) {
