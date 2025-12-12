@@ -8,13 +8,18 @@ async function generateIndustrySummary(
     signals?: string[];
   }[]
 ) {
-  const allSignals = companies.flatMap(
-    (c) => c.signals ?? []
-  );
+  const signalCounts: Record<string, number> = {};
 
-  const topSignals = Array.from(
-    new Set(allSignals)
-  ).slice(0, 5);
+  for (const company of companies) {
+    for (const signal of company.signals ?? []) {
+      signalCounts[signal] = (signalCounts[signal] ?? 0) + 1;
+    }
+  }
+
+  const topSignals = Object.entries(signalCounts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5)
+    .map(([signal]) => signal);
 
   if (DEV_MODE) {
     return `This industry includes companies operating in ${industry}. Common themes suggest activity around ${
@@ -26,22 +31,24 @@ async function generateIndustrySummary(
 You are a market intelligence analyst.
 
 Write a concise 2–4 sentence summary describing the industry below.
-Focus on:
+
+Incorporate:
 - What types of companies operate in this industry
-- Common themes or signals across companies
-- What appears to be emerging or notable
+- The dominant themes or signals driving activity
+- Whether the space appears emerging, active, or crowded
 
 Industry: ${industry}
 
-Companies:
-${companies.map((c) => `- ${c.name}`).join("\n")}
-
-Signals:
+Top Signals:
 ${topSignals.join(", ") || "None"}
+
+Companies:
+${companies.map((c) => c.name).join(", ")}
 
 Tone:
 - Neutral
 - Analytical
+- Specific (avoid generic language)
 - No hype
 `;
 

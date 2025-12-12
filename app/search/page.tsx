@@ -108,6 +108,34 @@ export default async function Page({
     .sort((a, b) => b.totalSignals - a.totalSignals)
     .slice(0, 5);
 
+  function getIndustryLabel(
+    companyCount: number,
+    totalSignals: number
+  ) {
+    if (companyCount <= 3 && totalSignals <= 5) {
+      return "Emerging";
+    }
+
+    if (companyCount <= 6 && totalSignals <= 10) {
+      return "Active";
+    }
+
+    return "Crowded";
+  }
+
+  const industryTopSignals = Object.entries(graph.industries).map(
+    ([industry, data]) => {
+      const rankedSignals = Object.entries(data.signals)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 3);
+
+      return {
+        industry,
+        signals: rankedSignals,
+      };
+    }
+  );
+
   const companiesByIndustry = companies.reduce(
     (acc, company) => {
       const key = company.industry ?? "Other";
@@ -144,12 +172,48 @@ export default async function Page({
                     {industry}
                   </a>
                   <span className="text-neutral-400 ml-2">
-                    — {totalSignals} signals across {companyCount} companies
+                    — {getIndustryLabel(companyCount, totalSignals)} ·{" "}
+                    {totalSignals} signals / {companyCount} companies
                   </span>
                 </li>
               )
             )}
           </ul>
+        </section>
+      )}
+
+      {industryTopSignals.length > 0 && (
+        <section className="mb-14 max-w-4xl">
+          <h2 className="text-sm font-medium text-neutral-700 mb-4">
+            What's Driving Activity
+          </h2>
+
+          <div className="space-y-4">
+            {industryTopSignals.map(({ industry, signals }) => (
+              <div key={industry}>
+                <a
+                  href={`/industry/${slugify(industry)}`}
+                  className="text-sm font-medium text-neutral-700 hover:underline"
+                >
+                  {industry}
+                </a>
+
+                {signals.length > 0 ? (
+                  <ul className="mt-1 text-sm text-neutral-600 flex flex-wrap gap-x-3">
+                    {signals.map(([signal]) => (
+                      <li key={signal} className="after:content-[','] last:after:content-['']">
+                        {signal}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-sm text-neutral-400 mt-1">
+                    No dominant signals detected
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
         </section>
       )}
 
