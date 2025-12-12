@@ -78,30 +78,6 @@ Tone:
     return null;
   }
 }
-<｜tool▁call▁begin｜>
-read_lints
-
-  const response = await fetch("https://api.openai.com/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-    },
-    body: JSON.stringify({
-      model: "gpt-4o-mini",
-      messages: [{ role: "user", content: prompt }],
-      temperature: 0.3,
-      max_tokens: 120,
-    }),
-  });
-
-  if (!response.ok) {
-    return null;
-  }
-
-  const data = await response.json();
-  return data.choices?.[0]?.message?.content ?? null;
-}
 
 function normalize(str: string) {
   return str.toLowerCase().replace(/[^a-z0-9]/g, "");
@@ -169,18 +145,20 @@ export default async function CompanyPage({
           <h2 className="text-sm font-medium text-neutral-700 mb-2">
             Overview
           </h2>
-          <p className="text-sm text-neutral-600 leading-relaxed">
-            {summary}
-          </p>
-        </section>
-      ) : !process.env.SUMMARY_MODE ? (
-        <section className="mb-10">
-          <h2 className="text-sm font-medium text-neutral-700 mb-2">
-            Overview
-          </h2>
-          <p className="text-sm text-neutral-400 italic">
-            AI-generated summaries are disabled in development mode.
-          </p>
+
+          {summary ? (
+            <p className="text-sm text-neutral-600 leading-relaxed">
+              {summary}
+            </p>
+          ) : !SUMMARY_MODE ? (
+            <p className="text-sm text-neutral-400 italic">
+              AI-generated summaries are disabled in development mode.
+            </p>
+          ) : (
+            <p className="text-sm text-neutral-400 italic">
+              Summary unavailable.
+            </p>
+          )}
         </section>
       ) : null}
 
