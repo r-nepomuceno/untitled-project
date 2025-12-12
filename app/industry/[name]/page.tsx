@@ -76,29 +76,36 @@ type Company = {
   signals?: string[];
 };
 
-async function fetchIndustry(name: string): Promise<Company[]> {
+async function fetchIndustryCompanies(
+  industrySlug: string
+): Promise<Company[]> {
   const baseUrl =
     process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
+  // Map slug to a broad market query (MVP logic)
+  const industryQuery = industrySlug.includes("artificial-intelligence")
+    ? "AI startups"
+    : industrySlug.replace(/-/g, " ");
+
   const res = await fetch(
-    `${baseUrl}/api/search?q=${encodeURIComponent(name)}`,
+    `${baseUrl}/api/search?q=${encodeURIComponent(industryQuery)}`,
     { cache: "no-store" }
   );
 
   if (!res.ok) return [];
 
   const data = await res.json();
+  const companies: Company[] = data.companies ?? [];
 
-  const normalizedIndustry = name.toLowerCase();
+  const normalizedIndustry = industrySlug.replace(/-/g, " ").toLowerCase();
 
-  return (data.companies ?? []).filter((c) => {
+  return companies.filter((c) => {
     if (!c.industry) return false;
-
-    const industryValue = c.industry.toLowerCase();
-
+    const value = c.industry.toLowerCase();
     return (
-      industryValue.includes(normalizedIndustry) ||
-      normalizedIndustry.includes(industryValue)
+      value.includes(normalizedIndustry) ||
+      normalizedIndustry.includes(value) ||
+      value.includes("ai")
     );
   });
 }
@@ -109,7 +116,7 @@ type Props = {
 
 export default async function IndustryPage({ params }: Props) {
   const industryName = params.name.replace(/-/g, " ");
-  const companies = await fetchIndustry(industryName);
+  const companies = await fetchIndustryCompanies(params.name);
 
   const signalCounts: Record<string, number> = {};
 
