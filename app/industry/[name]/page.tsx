@@ -89,10 +89,18 @@ async function fetchIndustry(name: string): Promise<Company[]> {
 
   const data = await res.json();
 
-  return (data.companies ?? []).filter(
-    (c: Company) =>
-      c.industry?.toLowerCase() === name.toLowerCase()
-  );
+  const normalizedIndustry = name.toLowerCase();
+
+  return (data.companies ?? []).filter((c) => {
+    if (!c.industry) return false;
+
+    const industryValue = c.industry.toLowerCase();
+
+    return (
+      industryValue.includes(normalizedIndustry) ||
+      normalizedIndustry.includes(industryValue)
+    );
+  });
 }
 
 type Props = {
