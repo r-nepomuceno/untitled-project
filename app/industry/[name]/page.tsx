@@ -103,6 +103,18 @@ export default async function IndustryPage({ params }: Props) {
   const industryName = params.name.replace(/-/g, " ");
   const companies = await fetchIndustry(industryName);
 
+  const signalCounts: Record<string, number> = {};
+
+  for (const company of companies) {
+    for (const signal of company.signals ?? []) {
+      signalCounts[signal] = (signalCounts[signal] ?? 0) + 1;
+    }
+  }
+
+  const topSignals = Object.entries(signalCounts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5);
+
   const summary = await generateIndustrySummary(
     industryName,
     companies
@@ -122,6 +134,24 @@ export default async function IndustryPage({ params }: Props) {
           <p className="text-sm text-neutral-600 leading-relaxed">
             {summary}
           </p>
+        </section>
+      )}
+
+      {topSignals.length > 0 && (
+        <section className="mb-10 max-w-3xl">
+          <h2 className="text-sm font-medium text-neutral-700 mb-2">
+            Dominant Signals
+          </h2>
+          <ul className="text-sm text-neutral-600 space-y-1">
+            {topSignals.map(([signal, count]) => (
+              <li key={signal}>
+                {signal}
+                <span className="text-neutral-400 ml-2">
+                  ({count})
+                </span>
+              </li>
+            ))}
+          </ul>
         </section>
       )}
 
