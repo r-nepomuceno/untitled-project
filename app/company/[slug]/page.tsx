@@ -9,6 +9,8 @@ type Company = {
 const DEV_MODE = process.env.DEV_MODE === "true";
 const SUMMARY_MODE = process.env.SUMMARY_MODE === "true";
 
+console.log("SUMMARY_MODE =", SUMMARY_MODE);
+
 async function generateCompanySummary(company: {
   name: string;
   industry?: string;
@@ -140,27 +142,25 @@ export default async function CompanyPage({
         </p>
       )}
 
-      {summary ? (
-        <section className="mb-10">
-          <h2 className="text-sm font-medium text-neutral-700 mb-2">
-            Overview
-          </h2>
+      <section className="mb-10">
+        <h2 className="text-sm font-medium text-neutral-700 mb-2">
+          Overview
+        </h2>
 
-          {summary ? (
-            <p className="text-sm text-neutral-600 leading-relaxed">
-              {summary}
-            </p>
-          ) : !SUMMARY_MODE ? (
-            <p className="text-sm text-neutral-400 italic">
-              AI-generated summaries are disabled in development mode.
-            </p>
-          ) : (
-            <p className="text-sm text-neutral-400 italic">
-              Summary unavailable.
-            </p>
-          )}
-        </section>
-      ) : null}
+        {!SUMMARY_MODE ? (
+          <p className="text-sm text-neutral-400 italic">
+            AI-generated summaries are disabled in development mode.
+          </p>
+        ) : summary ? (
+          <p className="text-sm text-neutral-600 leading-relaxed">
+            {summary}
+          </p>
+        ) : (
+          <p className="text-sm text-neutral-400 italic">
+            Summary unavailable.
+          </p>
+        )}
+      </section>
 
       <div className="space-y-8 text-sm text-neutral-700">
         <section>
