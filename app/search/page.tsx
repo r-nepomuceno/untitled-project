@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import CompanyCard from "@/components/CompanyCard";
+import SaveMapButton from "@/components/SaveMapButton";
 
 function slugify(value: string) {
   return value
@@ -151,9 +152,12 @@ export default async function Page({
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-16">
-      <h1 className="text-2xl font-semibold mb-8">
-        Results for "{query}"
-      </h1>
+      <div className="flex items-center justify-between mb-8">
+        <h1 className="text-2xl font-semibold">
+          Results for "{query}"
+        </h1>
+        <SaveMapButton query={query} results={data} />
+      </div>
 
       {industryActivity.length > 0 && (
         <section className="mb-12 max-w-3xl">
