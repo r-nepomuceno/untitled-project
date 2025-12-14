@@ -105,7 +105,7 @@ export default async function CompanyPage({
   if (!company) {
     return (
       <div className="max-w-4xl mx-auto px-6 py-16">
-        <h1 className="text-xl font-semibold">
+        <h1 className="text-2xl font-semibold">
           Company not found
         </h1>
       </div>
@@ -121,13 +121,13 @@ export default async function CompanyPage({
       </h1>
 
       {company.industry && (
-        <p className="text-sm text-neutral-500 mb-8">
+        <p className="text-sm text-neutral-400 mb-8">
           {company.industry}
         </p>
       )}
 
       {summary && (
-        <section className="mb-10">
+        <section className="mb-10 max-w-3xl">
           <h2 className="text-sm font-medium text-neutral-700 mb-2">
             Overview
           </h2>
@@ -137,32 +137,36 @@ export default async function CompanyPage({
         </section>
       )}
 
-      <div className="space-y-8 text-sm text-neutral-700">
+      <div className="space-y-8">
         <section>
-          <h2 className="font-medium mb-2">Signals</h2>
+          <h2 className="text-sm font-medium text-neutral-700 mb-2">
+            Signals
+          </h2>
           {company.signals?.length ? (
-            <ul className="list-disc ml-5 space-y-1">
+            <ul className="text-sm text-neutral-600 space-y-1">
               {company.signals.map((signal) => (
                 <li key={signal}>{signal}</li>
               ))}
             </ul>
           ) : (
-            <p className="text-neutral-500">
+            <p className="text-sm text-neutral-500">
               No signals extracted yet.
             </p>
           )}
         </section>
 
         <section>
-          <h2 className="font-medium mb-2">People</h2>
+          <h2 className="text-sm font-medium text-neutral-700 mb-2">
+            People
+          </h2>
           {company.people?.length ? (
-            <ul className="list-disc ml-5 space-y-1">
+            <ul className="text-sm text-neutral-600 space-y-1">
               {company.people.map((person) => (
                 <li key={person}>{person}</li>
               ))}
             </ul>
           ) : (
-            <p className="text-neutral-500">
+            <p className="text-sm text-neutral-500">
               No people extracted yet.
             </p>
           )}

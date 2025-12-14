@@ -50,7 +50,7 @@ export default async function Page({
   if (!query) {
     return (
       <div className="max-w-6xl mx-auto px-6 py-16">
-        <h1 className="text-xl font-semibold">No search query provided</h1>
+        <h1 className="text-2xl font-semibold">No search query provided</h1>
       </div>
     );
   }
