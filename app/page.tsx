@@ -4,42 +4,33 @@ import SearchBar from "@/components/SearchBar"
 
 export default function Home() {
   return (
-    <div 
-      className="relative min-h-screen flex flex-col overflow-hidden"
-      style={{ backgroundColor: "#F8F6F2" }}
-    >
-
+    <div className="relative min-h-screen flex flex-col overflow-hidden bg-neutral-50">
       {/* Navigation Bar */}
-      <nav className="relative z-10 max-w-7xl mx-auto w-full px-6 py-4">
-        <div className="flex justify-between items-center">
-          <div className="text-neutral-900/80 font-medium">
+      <nav className="relative z-10 w-full border-b border-neutral-100">
+        <div className="max-w-7xl mx-auto px-6 md:px-8 h-16 flex justify-between items-center">
+          <div className="text-base font-semibold text-neutral-900">
             untitled project
           </div>
-          <div className="flex gap-6">
-            <a href="#" className="text-neutral-900/80 hover:text-accent transition-colors">
-              About
-            </a>
-            <a href="#" className="text-neutral-900/80 hover:text-accent transition-colors">
-              Sign In
-            </a>
+          <div className="flex items-center gap-6">
           </div>
         </div>
       </nav>
 
       {/* Hero Section */}
-      <main className="relative z-10 flex-1 flex flex-col items-center justify-center px-6 pt-16">
-        <div className="flex flex-col items-center text-center">
-          <h1 className="text-6xl md:text-7xl font-semibold tracking-tight leading-[1.05] text-neutral-900">
+      <main className="relative z-10 flex-1 flex flex-col items-center justify-center px-6 md:px-8 py-16 md:py-24">
+        <div className="flex flex-col items-center text-center max-w-3xl mx-auto">
+          {/* Main Heading */}
+          <h1 className="text-5xl md:text-5xl font-bold leading-[1.1] tracking-[-0.02em] text-neutral-900 mb-4">
             Map the market.
           </h1>
 
-          <div className="w-12 h-1 bg-accent rounded-full mt-4" />
-
-          <p className="max-w-xl mx-auto mt-6 text-base md:text-lg text-muted-foreground">
-            AI-powered mapping that reveals companies, clusters, people, and patterns — all from a single search.
+          {/* Subheading */}
+          <p className="text-lg leading-[1.6] text-neutral-600 max-w-[600px] mb-8">
+            Get competitive intelligence and market insights in minutes.
           </p>
 
-          <div className="mt-4 w-full">
+          {/* Search Box */}
+          <div className="w-full max-w-[600px] mt-2">
             <SearchBar />
           </div>
         </div>
