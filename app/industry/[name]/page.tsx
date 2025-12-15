@@ -1,3 +1,5 @@
+import BackButton from "@/components/BackButton"
+
 const DEV_MODE = process.env.DEV_MODE === "true";
 
 async function generateIndustrySummary(
@@ -144,7 +146,11 @@ export default async function IndustryPage({ params }: Props) {
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-16">
-      <h1 className="text-2xl font-semibold mb-8 capitalize">
+      <div className="mb-6">
+        {<BackButton />}
+      </div>
+
+      <h1 className="text-4xl font-bold mb-8 capitalize">
         {industryName}
       </h1>
 
