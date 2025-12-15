@@ -29,23 +29,18 @@ const config = {
           800: "#2B2622",
           900: "#111111",
         },
-        // Accent (yellow)
-        accent: {
-          DEFAULT: "#F5D547",
-          hover: "#E8C935",
-          light: "#FEF5D6",
-        },
+        // Accent (removed - using neutral greyscale only)
         // Semantic colors
         success: "#10B981",
         warning: "#F59E0B",
         error: "#EF4444",
         info: "#3B82F6",
         // Legacy/Compatibility colors
-        background: "#F6F1E7",
+        background: "#FFFFFF",
         surface: "#FFFFFF",
         "text-primary": "#111111",
-        "text-secondary": "#4A4641",
-        border: "#EEEBE5",
+        "text-secondary": "#404040",
+        border: "#D4D4D4",
         // shadcn/ui colors (kept for compatibility)
         "shadcn-border": "hsl(var(--border))",
         input: "hsl(var(--input))",

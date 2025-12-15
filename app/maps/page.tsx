@@ -168,7 +168,7 @@ export default function MySavedMapsPage() {
                   </button>
                   <button
                     onClick={() => handleDelete(map.id)}
-                    className="px-3 py-1.5 text-xs font-medium text-red-600 bg-red-50 rounded-md hover:bg-red-100 transition-colors"
+                    className="px-3 py-1.5 text-xs font-medium text-neutral-700 bg-neutral-100 rounded-md hover:bg-neutral-200 transition-colors"
                   >
                     Delete
                   </button>

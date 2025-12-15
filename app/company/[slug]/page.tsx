@@ -1,3 +1,5 @@
+import BackButton from "@/components/BackButton"
+
 type Company = {
   name: string;
   industry?: string;
@@ -7,6 +9,9 @@ type Company = {
 };
 
 const DEV_MODE = process.env.DEV_MODE === "true";
+const SUMMARY_MODE = process.env.SUMMARY_MODE === "true";
+
+console.log("SUMMARY_MODE =", SUMMARY_MODE);
 
 async function generateCompanySummary(company: {
   name: string;
@@ -14,22 +19,20 @@ async function generateCompanySummary(company: {
   signals?: string[];
   people?: string[];
 }) {
-  if (DEV_MODE) {
-    return `This is an early-stage company operating in the ${
-      company.industry ?? "broader market"
-    }. Initial signals suggest activity around ${
-      company.signals?.slice(0, 3).join(", ") || "product development and growth"
-    }.`;
+  if (!SUMMARY_MODE) {
+    return null;
   }
 
-  const prompt = `
+  try {
+    const prompt = `
 You are a market intelligence analyst.
 
 Write a concise 2–3 sentence summary describing the company below.
-Focus on:
-- What the company does
-- The market or industry it operates in
-- Any notable signals or themes
+
+Incorporate:
+- What the company appears to do
+- The industry or market it operates in
+- How it fits within broader industry activity or themes
 
 Company:
 Name: ${company.name}
@@ -37,32 +40,47 @@ Industry: ${company.industry ?? "Unknown"}
 Signals: ${company.signals?.join(", ") ?? "None"}
 People: ${company.people?.join(", ") ?? "None"}
 
+Guidance:
+- Be specific where possible
+- Avoid generic startup language
+- If information is limited, state uncertainty clearly
+- Do not invent facts
+
 Tone:
 - Neutral
-- Informative
+- Analytical
+- Clear
 - No hype
 `;
 
-  const response = await fetch("https://api.openai.com/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-    },
-    body: JSON.stringify({
-      model: "gpt-4o-mini",
-      messages: [{ role: "user", content: prompt }],
-      temperature: 0.3,
-      max_tokens: 120,
-    }),
-  });
+    const response = await fetch(
+      "https://api.openai.com/v1/chat/completions",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+        },
+        body: JSON.stringify({
+          model: "gpt-4o-mini",
+          messages: [{ role: "user", content: prompt }],
+          temperature: 0.3,
+          max_tokens: 120,
+        }),
+      }
+    );
 
-  if (!response.ok) {
+    if (!response.ok) {
+      console.error("OpenAI error:", response.status);
+      return null;
+    }
+
+    const data = await response.json();
+    return data.choices?.[0]?.message?.content ?? null;
+  } catch (err) {
+    console.error("Company summary generation failed:", err);
     return null;
   }
-
-  const data = await response.json();
-  return data.choices?.[0]?.message?.content ?? null;
 }
 
 function normalize(str: string) {
@@ -105,7 +123,10 @@ export default async function CompanyPage({
   if (!company) {
     return (
       <div className="max-w-4xl mx-auto px-6 py-16">
-        <h1 className="text-2xl font-semibold">
+        <div className="mb-6">
+          {<BackButton />}
+        </div>
+        <h1 className="text-xl font-semibold">
           Company not found
         </h1>
       </div>
@@ -116,34 +137,45 @@ export default async function CompanyPage({
 
   return (
     <div className="max-w-4xl mx-auto px-6 py-16">
-      <h1 className="text-2xl font-semibold mb-2">
+      <div className="mb-6">
+        {<BackButton />}
+      </div>
+
+      <h1 className="text-4xl font-bold mb-2">
         {company.name}
       </h1>
 
       {company.industry && (
-        <p className="text-sm text-neutral-400 mb-8">
+        <p className="text-sm text-neutral-500 mb-8">
           {company.industry}
         </p>
       )}
 
-      {summary && (
-        <section className="mb-10 max-w-3xl">
-          <h2 className="text-sm font-medium text-neutral-700 mb-2">
-            Overview
-          </h2>
+      <section className="mb-10">
+        <h2 className="text-sm font-medium text-neutral-700 mb-2">
+          Overview
+        </h2>
+
+        {!SUMMARY_MODE ? (
+          <p className="text-sm text-neutral-400 italic">
+            AI-generated summaries are disabled in development mode.
+          </p>
+        ) : summary ? (
           <p className="text-sm text-neutral-600 leading-relaxed">
             {summary}
           </p>
-        </section>
-      )}
+        ) : (
+          <p className="text-sm text-neutral-400 italic">
+            Summary unavailable.
+          </p>
+        )}
+      </section>
 
-      <div className="space-y-8">
+      <div className="space-y-10">
         <section>
-          <h2 className="text-sm font-medium text-neutral-700 mb-2">
-            Signals
-          </h2>
+          <h2 className="text-sm font-medium text-neutral-700 mb-2">Signals</h2>
           {company.signals?.length ? (
-            <ul className="text-sm text-neutral-600 space-y-1">
+            <ul className="text-sm text-neutral-600 leading-relaxed space-y-1">
               {company.signals.map((signal) => (
                 <li key={signal}>{signal}</li>
               ))}
@@ -156,11 +188,9 @@ export default async function CompanyPage({
         </section>
 
         <section>
-          <h2 className="text-sm font-medium text-neutral-700 mb-2">
-            People
-          </h2>
+          <h2 className="text-sm font-medium text-neutral-700 mb-2">People</h2>
           {company.people?.length ? (
-            <ul className="text-sm text-neutral-600 space-y-1">
+            <ul className="text-sm text-neutral-600 leading-relaxed space-y-1">
               {company.people.map((person) => (
                 <li key={person}>{person}</li>
               ))}

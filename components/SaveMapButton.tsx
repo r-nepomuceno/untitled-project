@@ -56,9 +56,9 @@ export default function SaveMapButton({ query, results }: Props) {
 
   if (saved) {
     return (
-      <div className="flex items-center gap-2 text-sm text-green-600">
+      <div className="flex items-center gap-2 text-xs text-neutral-600">
         <svg
-          className="w-5 h-5"
+          className="w-4 h-4"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -70,9 +70,9 @@ export default function SaveMapButton({ query, results }: Props) {
             d="M5 13l4 4L19 7"
           />
         </svg>
-        <span>Map saved!</span>
+        <span>Saved</span>
         {mapId && (
-          <span className="text-xs text-neutral-500">
+          <span className="text-xs text-neutral-400">
             (ID: {mapId.substring(0, 8)}...)
           </span>
         )}
@@ -85,12 +85,12 @@ export default function SaveMapButton({ query, results }: Props) {
       <button
         onClick={handleSave}
         disabled={isSaving}
-        className="px-4 py-2 bg-neutral-900 text-white rounded-md hover:bg-neutral-800 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium transition-colors"
+        className="px-3 py-1.5 text-xs font-medium text-neutral-700 bg-neutral-100 rounded-md hover:bg-neutral-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
       >
         {isSaving ? "Saving..." : "Save this map"}
       </button>
       {error && (
-        <p className="text-xs text-red-600">{error}</p>
+        <p className="text-xs text-neutral-500">{error}</p>
       )}
     </div>
   )
